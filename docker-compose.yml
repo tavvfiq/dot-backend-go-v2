@@ -1,0 +1,56 @@
+version: "3.7"
+services:
+  dot-postgres:
+    image: postgres
+    container_name: dot_postgres
+    hostname: postgres
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: dot
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: postgres
+    volumes:
+       - postgres:/data/postgres
+    ports:
+      - 5432:5432
+    restart: on-failure
+    networks:
+      - postgres
+
+  dot-redis:
+    image: redis:alpine
+    container_name: dot_redis
+    hostname: redis
+    command: --port 6379
+    ports:
+      - 6379:6379
+    restart: on-failure
+    networks:
+      - redis
+
+  dot-article-api:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      image: dot_article_api
+      container_name: dot_article_api
+      depends_on:
+        - dot-postgres
+        - dot-redis
+      restart: on-failure
+      environment:
+        - PORT=:8080
+        - ENV=${ENV}
+      ports:
+        - 8080:8080
+      networks:
+        - redis
+        - postgres
+
+networks:
+  postgres:
+  redis:
+
+volumes:
+    postgres:
+
