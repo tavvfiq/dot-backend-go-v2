@@ -25,16 +25,14 @@ func (r articlePostgresRepository) WithTransaction(ctx context.Context, fn func(
 	err := fn(ctxWithTx)
 	if err != nil {
 		if err := tx.Rollback().Error; err != nil {
-			if err != nil {
-				return errors.Wrap(err, "error on rollback")
-			}
+			log.Println(errors.Wrap(err, "error on rollback"))
+			return err
 		}
+		log.Println(errors.Wrap(err, "error on transaction"))
 		return err
 	}
 	if err := tx.Commit().Error; err != nil {
-		if err != nil {
-			return errors.Wrap(err, "error on commit")
-		}
+		log.Println(errors.Wrap(err, "error on commit"))
 		return err
 	}
 	return nil
