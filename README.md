@@ -13,7 +13,12 @@ ___
 | add comment 	| POST 	| /v1/comment 	|  	|  	| {      "user_id" :  1 ,      "article_id" :  15 ,      "content" :  "tidak tau" } 	|
 | delete comment 	| DELETE 	| /v1/comment/:id 	| comment id 	|  	|  	|
 
+___
 ### why using [go-clean-arch](https://github.com/bxcodec/go-clean-arch) pattern?
-in my opinion, this pattern is good for both small project and big project because of its scalability. a little bit bloated and not too DRY, but its prevent for tight coupling for every layer (domain, usecase, repository, delivery/handler, etc). every layer has its own contract to communicate with each other. so if there are any changes on any layer, it will not effect/break other layer as long as not breaking the contract.
+in my opinion, this pattern is good for both small project and big project because of its scalability. a little bit bloated and not too DRY, but its prevent for tight coupling for every layer (domain, usecase, repository, delivery/handler, etc) because of the dependency injection. every layer has its own contract to communicate with each other. so if there are any changes on any layer, it will not effect/break other layer as long as not breaking the contract.
+___
+### deploying
+#### make sure makefile, docker and docker-compose is installed and env variable adapted to your system. then run:
+``` make docker.start env=local ```
 
 
